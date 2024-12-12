@@ -3,6 +3,13 @@
 #include <string.h>
 
 
+
+int main(){
+
+    return 0;
+}
+
+
 // Struktur untuk Node Double Linked List (Pemilihan Kelas)
 typedef struct Kelas
 {
@@ -11,8 +18,5 @@ typedef struct Kelas
     struct Kelas *next;
 } Kelas;
 
-int main(){
 
-    return 0;
-}
 
