@@ -20,8 +20,8 @@ typedef struct NodeAktivitas {
 typedef struct NodeQ {
     char materi[50];
     struct NodeQ *next;
-    NodeQ *front;
-    NodeQ *rear;
+    NodeQ *frontQ;
+    NodeQ *rearQ;
 } NodeQ;
 
 // Struktur untuk Tugas (Single Linked List)
@@ -34,8 +34,8 @@ typedef struct NodeTugas {
 // Variabel Global
 Kelas* kepalaDaftarKelas = NULL;
 NodeAktivitas* tumpukanAktivitas = NULL;
-NodeQ* depanAntrian = NULL;
-NodeQ* belakangAntrian = NULL;
+NodeQ *frontQ = NULL;
+NodeQ *rearQ = NULL;
 NodeTugas* kepalaDaftarTugas = NULL;
 
 
@@ -190,42 +190,37 @@ void popAktivitas(){}
 void tampilkanAktivitas(){}
 
 // Menu antrian belajar (queque) (no. 5)
-void definequeue(NodeQ *q){
-    q->front = NULL;
-    q->rear = NULL;
-}
-
 void enqueue(NodeQ *q, const char *materi){
     NodeQ *pNew = (NodeQ *)malloc(sizeof(NodeQ));
 
     strcpy(pNew->materi, materi);
     pNew->next = NULL;
 
-    if(q->rear != NULL)
-        q->rear->next = pNew;
+    if(q->rearQ != NULL)
+        q->rearQ->next = pNew;
     else 
-        q->rear = pNew;
+        q->rearQ = pNew;
     
-    q->rear = pNew;
+    q->rearQ = pNew;
 }
 
 void dequeue(NodeQ *q){
-    if (q->front != NULL){
+    if (q->frontQ != NULL){
         printf("tidak ada materi.\n");
         return;
     }
 
-    NodeQ *temp = q->front;
-    q->front = q->front->next;
-    if(q->front == NULL)
-        q->rear = NULL;
+    NodeQ *temp = q->frontQ;
+    q->frontQ = q->frontQ->next;
+    if(q->frontQ == NULL)
+        q->rearQ = NULL;
     
     printf("materi telah selesai.\n");
     free(temp);
 }
 
 void tampilkanAntrianBelajar(NodeQ *q){
-    NodeQ *temp = q->front;
+    NodeQ *temp = q->frontQ;
     printf("Antrian Belajar: \n");
     while(temp != NULL){
         printf("%s\n", temp->materi);
