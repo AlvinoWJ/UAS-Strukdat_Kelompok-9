@@ -2,32 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// menu utama
-void tampilkanMenu();
-void menuKelas();
-void menuAktivitas();
-void menuAntrianBelajar();
-void menuTugas();
-// Menu kelas (no. 1 dan no. 2)
-int isNamaKelasUnik(char* nama);
-void tambahKelas();
-void hapusKelas();
-void editKelas();
-void tampilkanKelas();
-// menu Aktifitas (no. 4)
-void pushAktivitas();
-void popAktivitas();
-void tampilkanAktivitas();
-// antrian belajar (queque) (no. 5)
-void enqueue();
-void dequeue();
-void tampilkanAntrianBelajar();
-// menu tugas (no. 6)
-void tambahTugas();
-void prosesTugas();
-void tampilkanTugas();
-
-
 // Struktur untuk Kelas (Double Linked List)
 typedef struct Kelas {
     char nama[50];
@@ -43,10 +17,12 @@ typedef struct NodeAktivitas {
 } NodeAktivitas;
 
 // Struktur untuk Queue Belajar
-typedef struct NodeQueue {
-    char modulBelajar[50];
-    struct NodeQueue* next;
-} NodeQueue;
+typedef struct NodeQ {
+    char materi[50];
+    struct NodeQ *next;
+    NodeQ *front;
+    NodeQ *rear;
+} NodeQ;
 
 // Struktur untuk Tugas (Single Linked List)
 typedef struct NodeTugas {
@@ -58,9 +34,39 @@ typedef struct NodeTugas {
 // Variabel Global
 Kelas* kepalaDaftarKelas = NULL;
 NodeAktivitas* tumpukanAktivitas = NULL;
-NodeQueue* depanAntrian = NULL;
-NodeQueue* belakangAntrian = NULL;
+NodeQ* depanAntrian = NULL;
+NodeQ* belakangAntrian = NULL;
 NodeTugas* kepalaDaftarTugas = NULL;
+
+
+// menu utama
+void tampilkanMenu();
+void menuKelas();
+void menuAktivitas();
+void menuAntrianBelajar();
+void menuTugas();
+
+// Menu kelas (no. 1 dan no. 2)
+int isNamaKelasUnik(char* nama);
+void tambahKelas();
+void hapusKelas();
+void editKelas();
+void tampilkanKelas();
+
+// menu Aktifitas (no. 4)
+void pushAktivitas();
+void popAktivitas();
+void tampilkanAktivitas();
+
+// antrian belajar (queue) (no. 5)
+void enqueue();
+void dequeue();
+void tampilkanAntrianBelajar();
+
+// menu tugas (no. 6)
+void tambahTugas();
+void prosesTugas();
+void tampilkanTugas();
 
 
 int main() {
@@ -179,19 +185,55 @@ void editKelas(){}
 void tampilkanKelas(){}
 
 // menu Aktifitas (no. 4)
-
 void pushAktivitas(){}
 void popAktivitas(){}
 void tampilkanAktivitas(){}
 
-// antrian belajar (queque) (no. 5)
+// Menu antrian belajar (queque) (no. 5)
+void definequeue(NodeQ *q){
+    q->front = NULL;
+    q->rear = NULL;
+}
 
-void enqueue(){}
-void dequeue(){}
-void tampilkanAntrianBelajar(){}
+void enqueue(NodeQ *q, const char *materi){
+    NodeQ *pNew = (NodeQ *)malloc(sizeof(NodeQ));
+
+    strcpy(pNew->materi, materi);
+    pNew->next = NULL;
+
+    if(q->rear != NULL)
+        q->rear->next = pNew;
+    else 
+        q->rear = pNew;
+    
+    q->rear = pNew;
+}
+
+void dequeue(NodeQ *q){
+    if (q->front != NULL){
+        printf("tidak ada materi.\n");
+        return;
+    }
+
+    NodeQ *temp = q->front;
+    q->front = q->front->next;
+    if(q->front == NULL)
+        q->rear = NULL;
+    
+    printf("materi telah selesai.\n");
+    free(temp);
+}
+
+void tampilkanAntrianBelajar(NodeQ *q){
+    NodeQ *temp = q->front;
+    printf("Antrian Belajar: \n");
+    while(temp != NULL){
+        printf("%s\n", temp->materi);
+        temp = temp->next;
+    }
+}
 
 // menu tugas (no. 6)
-
 void tambahTugas(){}
 void prosesTugas(){}
 void tampilkanTugas(){}
